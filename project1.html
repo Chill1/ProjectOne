@@ -1,0 +1,540 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+      <title>Project 1 Simple Game</title>
+      <!-- Charlie Hill
+		   Professor Labouseur
+		   Software Development 1
+		   18 February 2014
+		   Los Santos is a fictional city created by Rockstar Games for their game Grand Theft Auto 5. I borrowed the city of Los Santos to make this simple game -->
+	  <script>
+	 
+       // Global Variables
+	     //Array of Locations 
+         var Locale = new Array()
+		 Locale[0] = "Richman";
+		 Locale[1] = "Vespucci Beach";
+		 Locale[2] = "Airport";
+		 Locale[3] = "Vinewood";
+		 Locale[4] = "Downtown";
+		 Locale[5] = "The Bridge";
+		 Locale[6] = "East Vinewood";
+		 Locale[7] = "East Los Santos";
+		 Locale[8] = "The Port";
+		 Locale = 0 //Starting point is Richman
+		
+		 //Commands that are default, waiting for the user to changer their value aka issue that command.
+		 var help = -1
+		 var quit = -1
+		 var score = 0
+		 var interact = -1
+		 var inventory = -1
+		
+		 //Array to keep track of areas visited.
+		 var areaVisited = new Array(8);
+         for(i=0; i<= 8; i++){
+         areaVisited[i] = false;
+         }
+		 //Array to keep track of items taken.
+		 var taken = new Array(8);
+         for(i=0; i<= 8; i++){
+         taken[i] = "";
+         }
+		 
+		 //Array to allow for properties to be added to locations
+		var Identity = new Array()	
+         Identity[0] = Locale[0];
+		 Identity[1] = Locale[1];
+		 Identity[2] = Locale[2];
+		 Identity[3] = Locale[3];
+		 Identity[4] = Locale[4];
+		 Identity[5] = Locale[5];
+		 Identity[6] = Locale[6];
+		 Identity[7] = Locale[7];
+		 Identity[8] = Locale[8];  
+		 
+		 //Array to allow for properties to be added to items
+		var Item = new Array()	
+         Item[0] = Locale[0];
+		 Item[1] = Locale[1];
+		 Item[2] = Locale[2];
+		 Item[3] = Locale[3];
+		 Item[4] = Locale[4];
+		 Item[5] = Locale[5];
+		 Item[6] = Locale[6];
+		 Item[7] = Locale[7];
+		 Item[8] = Locale[8];  		
+	   //End Global Variable
+
+		  //Function to update display
+		  function updateDisplay() {
+            //Defaulting all text variables to nothing
+			var msg = "";
+			var exit = "";
+			var hasbeen = "";
+			var took = "";
+			var inv = "";
+			
+			//An array to add properties to the locations.
+			locs = new Array();
+			
+            locs[0] = new Identity(0);
+            locs[0].name = "Richman";
+            locs[0].desc = "Richman is the upper class section of Los Santos. Golf is the popular activity in Richman.";            
+            ;
+            
+            locs[1] = new Identity(1);
+            locs[1].name = "Vespucci Beach";             
+            locs[1].desc = "Vespucci Beach is the most beautiful beach on the West Coast. Why not relax for a few hours?";            
+  
+            locs[2] = new Identity(2);
+            locs[2].name = "the airport";             
+            locs[2].desc = "The airport offers helicopters tours of the city.";
+
+			locs[3] = new Identity(3);
+            locs[3].name = "Vinewood";             
+            locs[3].desc = "This is where the movies are made. Is that Tom Hanks off in the distance?"; 
+			
+			locs[4] = new Identity(4);
+            locs[4].name = "Downtown";             
+            locs[4].desc = "Downtown Los Santos is the central shopping hub. Some people find shopping fun.";
+			
+			locs[5] = new Identity(5);
+            locs[5].name = "the bridge";             
+            locs[5].desc = "The bridge connects the airport to the port. Its a straghtaway with lots of room for driving.";
+			
+			locs[6] = new Identity(6);
+            locs[6].name = "East Vinewood";             
+            locs[6].desc = "All of the movies made in Vinewood are premiered here. There is a giant and fancy movie theatre.";
+			
+			locs[7] = new Identity(7);
+            locs[7].name = "East Los Santos";             
+            locs[7].desc = "East Los Santos is full of suburban neighborhoods and nature trails. The dam is a huge tourist attraction here.";
+			
+			locs[8] = new Identity(8);
+            locs[8].name = "the port";             
+            locs[8].desc = "The port smells pretty bad, but one could take a boat ride out and go deep sea fishing.";
+			
+				//This function sets the tostring for the locs
+				function Identity(id) {
+					this.id = id;
+					
+					this.name = "";
+					this.desc = "";
+					
+					this.toString = function() {
+					   return "Welcome to " + this.name + " (Location ID: " + this.id + ")" +"\n" + this.desc;
+					}
+				 }
+			//An array to that adds properties to the items	 
+			interaction = new Array();
+			
+			interaction[0] = new Item(0);
+            interaction[0].name = "Golf Scorecard, ";             
+            interaction[0].desc = "You decide to play a round of golf. After breaking 3 clubs, you find yourself with a score of 130.";
+			
+			interaction[1] = new Item(1);
+            interaction[1].name = "Sunburn, ";             
+            interaction[1].desc = "After relaxing on the beach for a few hours you received was a sunburn.";
+			
+			interaction[2] = new Item(2);
+            interaction[2].name = "Footage from tour, ";             
+            interaction[2].desc = "You decide to take a scenic tour of Los Santos via helicopter.";
+			
+			interaction[3] = new Item(3);
+            interaction[3].name = "A photo with Tom Hanks, ";             
+            interaction[3].desc = "You run up to Tom Hanks and ask to take a photo with him. He seems more that happy to do so, however, he seems to be busy so he quickly leaves after you take the photo.";
+			
+			interaction[4] = new Item(4);
+            interaction[4].name = "Stylish Clothes, ";             
+            interaction[4].desc = "You decide you need some new clothes to bring back home and go shopping.";  
+			
+			interaction[5] = new Item(5);
+            interaction[5].name = "A Speeding Ticket, ";             
+            interaction[5].desc = "You decide to speed across the bridge. Unfortunately, the cops pull you over and give you a ticket.";
+			
+			interaction[6] = new Item(6);
+            interaction[6].name = "Ticket from The LEGO Movie, ";             
+            interaction[6].desc = "You decide to go see The LEGO Movie in the big and fancy movie theatre.";
+			
+			interaction[7] = new Item(7);
+            interaction[7].name = "Souvenir photo of the Los Santos Dam, ";             
+            interaction[7].desc = "You decide to visit the dam and take a few pictures to show the family back home.";
+			
+			interaction[8] = new Item(8);
+            interaction[8].name = "A Snapper Fish";             
+            interaction[8].desc = "You decide to go deep sea fishing but all you caught was some Snapper fish.";
+			
+				//This function sets tostring to the interactions
+				function Item(id) {
+						this.id = id;
+						
+						this.name = "";
+						this.desc = "";
+						
+						this.toString = function() {
+						   return "Welcome to " + this.name + " (Location ID: " + this.id + ")" +"\n" + this.desc;
+						}
+					 }
+			
+			//What this switch statement does:
+			//Set tostring  of locs as the message
+			//Calls function that keeps tracking if a location has been visited already or not
+            switch (Locale) {
+               case 0: msg = locs[0].toString();
+					   richman();
+					   
+                               break;
+               case 1: msg = locs[1].toString();
+					   vespucci();
+					   
+                               break;
+               case 2: msg = locs[2].toString();
+                       airport();
+					   
+                               break;
+			   case 3: msg = locs[3].toString();
+					   vinewood();
+					   
+							   break;
+			   case 4: msg = locs[4].toString();
+					   downtown();
+					   
+							   break;
+			   case 5: msg = locs[5].toString();
+					   bridge();
+					   
+							   break;	
+			   case 6: msg = locs[6].toString();
+					   eastvinewood();
+					   
+							   break;
+			   case 7: msg = locs[7].toString();
+					   eastlossantos();
+					   
+							   break;
+			   case 8: msg = locs[8].toString();
+					   port();
+					   
+							   break;
+			   case 9: msg = "You cannot go that way."
+								
+			   					
+               default      : msg = "currentLocal matches no cases";
+            }
+			
+			     //These switch statements are used if a command was made that changed the value of the default value
+				 switch (help) {
+					case 1: hlp = "You have entered the help command OR have gone in an invalid direction. \n Visting a location for the first time increases score by 5 points. There are 9 total locations. \n Each location has an interaction. \n To go North: Type 'north', 'n', or press the North button. \n To go South: Type 'South', 's', or press the South button. \n To go East: Type 'East', 's', or press the East button. \n To go West: Type 'West', 'w', or press the West button. \n To interact: Type 'interact', 'i', or press the Interact button. \n To view your inventory: Type 'inventory','v' or press the Inventory button. \n To Quit: Type 'Quit', 'q' or press the Quit button."						   
+							break;		   					
+				   default      : hlp = "";
+				}
+				 switch (quit) {
+					case 1: exit = "Thanks for playing. "			   
+							break;		   					
+				   default      : exit = "";
+				}
+				 switch (interact) {
+					case 1:  take()		   
+							break;		   					
+				   default      : 
+				}
+						//This function checks the location and then displays the associated item description and adds it to the inventory
+						function take(){
+							if (Locale == 0) {
+								took = interaction[0].desc;
+								taken[0] = interaction[0].name;
+								
+							}
+							if (Locale == 1) {
+								took = interaction[1].desc;
+								taken[1] = interaction[1].name;
+							}
+							if (Locale == 2) {
+								took = interaction[2].desc;
+								taken[2] = interaction[2].name;
+							}
+							if (Locale == 3) {
+								took = interaction[3].desc;
+								taken[3] = interaction[3].name;
+							}
+							if (Locale == 4) {
+								took = interaction[4].desc;
+								taken[4] = interaction[4].name;
+							}
+							if (Locale == 5) {
+								took = interaction[5].desc;
+								taken[5] = interaction[5].name;
+							}
+							if (Locale == 6) {
+								took = interaction[6].desc;
+								taken[6] = interaction[6].name;
+							}
+							if (Locale == 7) {
+								took = interaction[7].desc;
+								taken[7] = interaction[7].name;
+							}
+							if (Locale == 8) {
+								took = interaction[8].desc;
+								taken[8] = interaction[8].name;
+							}
+						}
+				 //This is the switch statement for the inventory command		
+				 switch (inventory) {
+					case 1:  inv = "Inventory: " + taken[0] + taken[1] + taken[2] + taken[3] + taken[4] + taken[5] + taken[6] + taken[7] + taken[8] 	   
+							break;		   					
+				   default      : 
+				}			
+							
+				//These functions track score and whether or not someone has visited a location already
+				function richman(){
+					if(areaVisited[0] == false){
+					  score = score + 5;
+					  areaVisited[0] = true;
+					}
+					else
+					  alreadyVisited();	
+				  }
+
+				function vespucci(){
+					if(areaVisited[1] == false){
+					  score = score + 5;
+					  areaVisited[1] = true;
+					}
+					else
+					  alreadyVisited();	
+				  }
+
+				function airport(){
+					if(areaVisited[2] == false){
+					  score = score + 5;
+					  areaVisited[2] = true;
+					}
+					else
+					  alreadyVisited();	
+				  }
+
+				function vinewood(){
+					if(areaVisited[3] == false){
+					  acore = score + 5;
+					  areaVisited[3] = true;
+					}
+					else
+					  alreadyVisited();	
+				  }
+
+				function downtown(){
+					if(areaVisited[4] == false){
+					  score = score + 5;
+					  areaVisited[4] = true;
+					}
+					else
+					  alreadyVisited();	
+				  }
+
+				function bridge(){
+					if(areaVisited[5] == false){
+					  score = score + 5;
+					  areaVisited[5] = true;
+					}
+					else
+					  alreadyVisited();	
+				  }
+
+				function eastvinewood(){
+					if(areaVisited[6] == false){
+					  score = score + 5;
+					  areaVisited[6] = true;
+					}
+					else
+					  alreadyVisited();	
+				  }
+
+				function eastlossantos(){
+					if(areaVisited[7] == false){
+					  score = score + 5;
+					  areaVisited[7] = true;
+					}
+					else
+					  alreadyVisited();
+				  }
+				function port(){
+					if(areaVisited[8] == false){
+					  score = score + 5;
+					  areaVisited[8] = true;
+					}
+					else
+					  alreadyVisited();
+				  }  
+
+		     //This is called if a place has already been visted
+			function alreadyVisited(){
+				hasbeen = "You have been visited here already."
+			  }
+			  
+			//This updates the textarea and resets the commands to their default values so they do not keep running every time the textarea is updated.
+            var taPtr = document.getElementById("taDisplay");
+            var history = taPtr.value;
+            taPtr.value =  exit + "Score: " + score + "\n" + msg + " " + hasbeen + "\n" +   took  + inv  + hlp  + "\n" +  "\n" + history; 
+			help = -1
+			quit = -1
+			inventory = -1
+			interact = -1
+         } //This curly bracket ends the updatedisplay function
+		  
+		
+			
+         
+		  
+		  
+		//2d array for navigation  
+								/*N,S,E,W*/
+		 var nav = 			[	[-1,1,3,-1], //loc0
+								[0,2,4,-1],  //loc1
+								[1,-1,5,-1], //loc2
+								[-1,4,6,0],  //loc3
+								[3,5,7,1],   //loc4
+								[4,-1,8,2],  //loc5
+								[-1,7,-1,3], //loc6
+								[6,8,-1,4],  //loc7
+								[7,-1,-1,5]  //loc8
+							]
+		//this function reads the text input and sends it over to the buttonnav function					 
+		function textnav(){
+			  var inputValue = document.getElementById('inputValue').value;
+			  if(inputValue.toUpperCase() == 'NORTH' || inputValue.toUpperCase() == 'N')
+				buttonnav('north');
+			  else if(inputValue.toUpperCase() == 'SOUTH' || inputValue.toUpperCase() == 'S')
+				buttonnav('south');
+			  else if(inputValue.toUpperCase() == 'EAST' || inputValue.toUpperCase() == 'E')
+				buttonnav('east');
+			  else if(inputValue.toUpperCase() == 'WEST' || inputValue.toUpperCase() == 'W')
+				buttonnav('west');
+			  else if(inputValue.toUpperCase() == 'HELP' || inputValue.toUpperCase() == 'H')
+				buttonnav('help');
+			  else if(inputValue.toUpperCase() == 'INTERACT' || inputValue.toUpperCase() == 'I')
+				buttonnav('interact');
+			  else if(inputValue.toUpperCase() == 'INVENTORY' || inputValue.toUpperCase() == 'V')
+				buttonnav('inventory');	
+			  else if(inputValue.toUpperCase() == 'QUIT' || inputValue.toUpperCase() == 'Q')
+				buttonnav('quit');
+			  else { 
+					buttonnav('help') //If no input is valid the help command will be used
+				}
+				
+			  
+			 }					 
+		
+		
+		
+		
+		
+		 //This function deals with navigation and commands
+		 function buttonnav(move) {
+		    //Switch case to assign what to do with what input
+			var dir = -1;
+            var before = Locale;
+            switch(move) {
+               case('north'):
+                  dir = 0;
+                  break;
+               case('south'):
+                  dir = 1;
+                  break;
+               case('east'):
+				  dir = 2;
+                  break;
+               case('west'):
+				  dir = 3;
+                  break;
+			   case('help'):
+				  help = 1
+				  break;
+			   case('quit'):
+				  quit = 1
+				  break;
+			   case('interact'):
+				  interact = 1
+				  break;
+			   case('inventory'):
+				  inventory = 1
+				  break;
+					
+				  
+               default: alert("Internal Error: unknown direction: " + dir + ".");
+            }
+		
+		if (dir > -1) {   // This means a dir was set.
+         var newLocation = nav[Locale][dir];
+         if (newLocation != -1) {
+            Locale = newLocation; 
+         } else {
+            help = 1; //This means the desired direction was not a valid one, so the help box will be brought up
+		}
+		
+		
+		}
+		
+		
+		//If the location changed or a command was set the update display function will run
+		if (Locale != before || help == 1 || quit == 1 || interact == 1 || inventory == 1) {
+               updateDisplay();	 
+			   
+			}
+		
+	} //End of buttonav function
+
+
+      </script>
+	  
+   </head>
+   <body onload="updateDisplay();">
+      <h1>Welcome to Los Santos</h1>
+	  <h3>Los Santos is a fictional city representative of Los Angeles. Have fun exploring and interacting with the city.</h3>
+       <textarea id="taDisplay" style="width:1000px; height:500px;">
+      </textarea>
+      <br>
+	    <input type="text" id="inputValue" size=20></input>
+		<input type="button" value="Go" onclick="textnav();" />
+
+	
+	<br>
+	<input type="button"
+             value = "North"
+             onclick="buttonnav('north');">
+      <input type="button"
+             value = "South"
+             onclick="buttonnav('south');">
+      <input type="button"
+             value = "East"
+             onclick="buttonnav('east');">
+      <input type="button"
+             value = "West"
+             onclick="buttonnav('west');">  
+	<br>
+	  <input type="button"
+			 value = "Interact"
+			 onclick="buttonnav('interact')">
+	  <input type="button"
+			 value = "Inventory"
+			 onclick="buttonnav('inventory')">		 
+	 <br> 
+	  <input type="button"
+			 value = "Help"
+			 onclick="buttonnav('help')">
+	 <input type="button"
+			 value = "Quit"
+			 onclick="buttonnav('quit')">
+	 <br>
+		<h2> Map of Los Santos </h2>
+	 
+
+	
+	 <div>	
+	 <img id="map" src="map.png" height="300" width="600">
+	 </div>
+  
+	  
+   </body>
+</html>
